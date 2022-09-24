@@ -8,14 +8,6 @@ import './index.css'
 class Login extends Component {
   state = {username: '', password: '', errorMsg: ''}
 
-  onChangeUsername = event => {
-    this.setState({username: event.target.value})
-  }
-
-  onChangePassword = event => {
-    this.setState({password: event.target.value})
-  }
-
   onSubmitSuccess = jwtToken => {
     const {history} = this.props
     Cookies.set('jwt_token', jwtToken, {
@@ -23,6 +15,14 @@ class Login extends Component {
       path: '/',
     })
     history.replace('/')
+  }
+
+  onChangeUsername = event => {
+    this.setState({username: event.target.value})
+  }
+
+  onChangePassword = event => {
+    this.setState({password: event.target.value})
   }
 
   onSubmitLogin = async event => {
@@ -86,14 +86,10 @@ class Login extends Component {
               placeholder="Password"
             />
           </label>
-          <button
-            onClick={this.onClickLogin}
-            type="submit"
-            className="login-button"
-          >
+          <button className="login-button" type="submit">
             Login
           </button>
-          <p className="error-msg">*{errorMsg}</p>
+          {errorMsg !== '' && <p className="error-msg">*{errorMsg}</p>}
         </form>
       </div>
     )

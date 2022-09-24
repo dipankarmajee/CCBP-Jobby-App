@@ -38,6 +38,8 @@ label {
   min-width: 100%;
   width: 250px;
   border-radius: 4px;
+  color: #cbd5e1;
+  font-weight: 500;
 }
 
 .login-button {
@@ -47,4 +49,11 @@ label {
   border-radius: 8px;
   color: #ffffff;
   font-family: Roboto;
+}
+
+.error-msg {
+  align-self: flex-start;
+  font-size: 12px;
+  margin: 0;
+  color: #ff0b37;
 }

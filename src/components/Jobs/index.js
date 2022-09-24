@@ -71,12 +71,11 @@ class Jobs extends Component {
   }
 
   searchJobs = event => {
-    this.setState({searchInput: event.target.value}, this.getJobApi)
+    this.setState({searchInput: event.target.value})
+    //   this.setState({searchInput: event.target.value}, this.getJobApi)
   }
 
   searchButton = () => {
-    const {searchInput} = this.state
-    console.log(searchInput)
     this.getJobApi()
   }
 
@@ -103,13 +102,13 @@ class Jobs extends Component {
     }
   }
 
-  retryProfileApi = () => {
-    this.getProfileApi()
-  }
+  //   retryProfileApi = () => {
+  //     this.getProfileApi()
+  //   }
 
   profileDetailsFailure = () => (
     <>
-      <button type="button" onClick={this.retryProfileApi}>
+      <button type="button" onClick={this.getProfileApi()}>
         Retry
       </button>
     </>
@@ -188,45 +187,49 @@ class Jobs extends Component {
             className="profile-image"
             alt="profile"
           />
-          <h3>{profileDetails.name}</h3>
-          <p>{profileDetails.shortBio}</p>
+          <h3 className="profile-name">{profileDetails.name}</h3>
+          <p className="profile-description">{profileDetails.shortBio}</p>
         </div>
         <hr className="hr-line" />
         <div>
           <JobDetailsFilter>
             <h3>Type of Employment</h3>
             <ul>
-              {employmentTypesList.map(eachType => (
-                <li key={eachType.employmentTypeId}>
-                  <label className="type-of-employment-label">
-                    <input
-                      value={eachType.employmentTypeId}
-                      type="checkbox"
-                      className="type-of-employment-input"
-                      onChange={this.onChangeJobType}
-                    />
-                    {eachType.label}
-                  </label>
-                </li>
-              ))}
+              <li>
+                {employmentTypesList.map(eachType => (
+                  <li key={eachType.employmentTypeId}>
+                    <label className="type-of-employment-label">
+                      <input
+                        value={eachType.employmentTypeId}
+                        type="checkbox"
+                        className="type-of-employment-input"
+                        onChange={this.onChangeJobType}
+                      />
+                      {eachType.label}
+                    </label>
+                  </li>
+                ))}
+              </li>
             </ul>
             <hr className="hr-line" />
             <h3>Salary Range</h3>
             <ul>
-              {salaryRangesList.map(eachType => (
-                <li key={eachType.salaryRangeId}>
-                  <label className="type-of-employment-label">
-                    <input
-                      value={eachType.salaryRangeId}
-                      type="radio"
-                      className="type-of-employment-input"
-                      onChange={this.onChangeSalaryRange}
-                      name="SalaryRange"
-                    />
-                    {eachType.label}
-                  </label>
-                </li>
-              ))}
+              <li>
+                {salaryRangesList.map(eachType => (
+                  <li key={eachType.salaryRangeId}>
+                    <label className="type-of-employment-label">
+                      <input
+                        value={eachType.salaryRangeId}
+                        type="radio"
+                        className="type-of-employment-input"
+                        onChange={this.onChangeSalaryRange}
+                        name="SalaryRange"
+                      />
+                      {eachType.label}
+                    </label>
+                  </li>
+                ))}
+              </li>
             </ul>
           </JobDetailsFilter>
         </div>
@@ -285,38 +288,57 @@ class Jobs extends Component {
   )
 
   loaderRenderView = () => (
-    <div className="loader-container" testid="loader">
+    <div
+      className="loader-container"
+      // /////////////////// testid="loader"
+    >
       <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
     </div>
   )
 
+  onEnterKey = event => {
+    // this.setState({searchInput: event.target.value})
+    if (event.key === 'Enter') {
+      this.getJobApi()
+    }
+  }
+
+  onSearchBarConainer = () => {
+    const {searchInput} = this.state
+    return (
+      <div className="search-input">
+        <input
+          type="search"
+          value={searchInput}
+          placeholder="Search"
+          className="search-input-bar"
+          onChange={this.searchJobs}
+          onKeyDown={this.onEnterKey}
+        />
+        <button
+          // /////////////////// testid="searchButton"
+          type="button"
+          className="search-button"
+          onClick={this.searchButton}
+        >
+          <BsSearch className="search-icon" />
+        </button>
+      </div>
+    )
+  }
+
   render() {
-    const {searchInput, apiStatus} = this.state
+    const {apiStatus} = this.state
     return (
       <>
         <Header />
         <div className="jobs-container">
-          <div className="search-input">
-            <input
-              type="search"
-              value={searchInput}
-              placeholder="Search"
-              className="search-input-bar"
-              onChange={this.searchJobs}
-            />
-            {/* testid="searchButton" */}
-            <button
-              testid="searchButton"
-              type="button"
-              className="search-button"
-              onClick={this.searchButton}
-            >
-              <BsSearch className="search-icon" />
-            </button>
+          <div className="profile-details-lg">
+            <div className="search-bar-sm">{this.onSearchBarConainer()}</div>
+            {this.profileDetailsAndJobPreference()}
           </div>
-
-          {this.profileDetailsAndJobPreference()}
           <div className="job-card-container">
+            <div className="search-bar-lg">{this.onSearchBarConainer()}</div>
             {apiStatus === apiStatusConstant.failure &&
               this.failureViewRender()}
             {apiStatus === apiStatusConstant.inProgress &&

@@ -5,8 +5,8 @@ import './index.css'
 const Header = props => {
   const onClickLogout = () => {
     const {history} = props
-    history.replace('/login')
     Cookies.remove('jwt_token')
+    history.replace('/login')
   }
   return (
     <ul className="navbar">
@@ -17,7 +17,7 @@ const Header = props => {
           className="website-logo"
         />
       </Link>
-      <div>
+      <div className="navbar">
         <li>
           <Link to="/" className="nav-link">
             Home
